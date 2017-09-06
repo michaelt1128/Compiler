@@ -1,0 +1,3 @@
+public enum Type {
+    ID, KEYWORD, SYMBOL, NUM, DELIMITER, COMMENT, ERROR
+}
