@@ -14,7 +14,7 @@ public class FileInterpreter {
     }
 
     private static void readLine(String x) {
-        System.out.println("\nLINE: " + x);
+        System.out.println("\nINPUT: " + x);
         readString(x);
     }
 
@@ -118,7 +118,7 @@ public class FileInterpreter {
                 } else if (placeholder.matches("[a-zA-Z]+")) {
                     type = Type.ID;
                     text = placeholder;
-                } else if (placeholder.matches("(\\d+)|(\\d+\\.\\d+)")) {
+                } else if (placeholder.matches("(\\d+)(\\.\\d+)?(E(-|\\+)?\\d+)?")) {
                     type = Type.NUM;
                     text = placeholder;
                 } else {
