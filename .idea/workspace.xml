@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c71147c3-f531-4a1f-b275-f1fbb1a1efa5" name="Default" comment="Project 2 complete">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Parser.java" />
+    <list default="true" id="c71147c3-f531-4a1f-b275-f1fbb1a1efa5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/compiler/Compiler.class" afterPath="$PROJECT_DIR$/out/production/compiler/Compiler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/compiler/FileInterpreter.class" afterPath="$PROJECT_DIR$/out/production/compiler/FileInterpreter.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/compiler/Token.class" afterPath="$PROJECT_DIR$/out/production/compiler/Token.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Compiler.java" afterPath="$PROJECT_DIR$/src/Compiler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/FileInterpreter.java" afterPath="$PROJECT_DIR$/src/FileInterpreter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Token.java" afterPath="$PROJECT_DIR$/src/Token.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Type.java" afterPath="$PROJECT_DIR$/src/Type.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tokens.txt" afterPath="$PROJECT_DIR$/tokens.txt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -324,7 +318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1505356630522</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Project 2 complete">
+      <created>1508369876712</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1508369876712</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
