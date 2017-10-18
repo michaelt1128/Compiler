@@ -2,7 +2,7 @@ public class Token {
     private String value = "";
     private Type type;
 
-    public Type getType() {
+    Type getType() {
         return type;
     }
 
@@ -10,14 +10,18 @@ public class Token {
         this.type = type;
     }
 
-    public Token(String value, Type type) {
+    Token(String value, Type type) {
         this.value = value;
         this.type = type;
     }
 
-    public void print() {
+    void print(int blockDepth) {
         if (!this.type.equals(Type.COMMENT)) {
-            System.out.println(this.type + ": '" + this.value + "'");
+            if (blockDepth > 0 && this.type.equals(Type.ID)) {
+                System.out.println(this.type + ": '" + this.value + "' depth: " + blockDepth);
+            } else {
+                System.out.println(this.type + ": '" + this.value + "'");
+            }
         }
     }
 

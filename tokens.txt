@@ -1,16 +1,5 @@
-/**/          /*/* */   */
-/*/*/****This**********/*/    */
-/**************/
-/*************************
-i = 333;        ******************/       */
-
-iiii = 3@33;
-
-int g 4.5E6 cd (int u, int v)      {
-if(v == >= 0) return/*a comment*/ u;
-else ret_urn gcd(vxxxxxxvvvvv, u-u/v*v);
-       /* u-u/v*v == u mod v*/
-!
+int var(int t) {
+ test = two[1] * 4 * 4;
+ test = two[1] = 4;
 }
-
-return void while       void main()
+$

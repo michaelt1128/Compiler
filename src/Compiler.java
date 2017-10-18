@@ -8,14 +8,7 @@ public class Compiler {
 
         FileInterpreter interpreter = new FileInterpreter();
         ArrayList<Token> tokens = interpreter.readFile(new File(args[0]));
-        final boolean[] hasError = {false};
-        tokens.forEach((Token token) -> {
-            if ((token.getType() == Type.ERROR)) {
-                hasError[0] = true;
-            }
-        });
-        if (hasError[0]) {
-            System.out.println("\nErrors exist in compilation");
-        }
+        tokens.forEach(token -> token.print(-1));
+        Parser p = new Parser(tokens);
     }
 }
