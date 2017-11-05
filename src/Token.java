@@ -15,6 +15,10 @@ public class Token {
         this.type = type;
     }
 
+    void print() {
+        System.out.println(this.type + ": '" + this.value + "'");
+    }
+
     void print(int blockDepth) {
         if (!this.type.equals(Type.COMMENT)) {
             if (blockDepth > 0 && this.type.equals(Type.ID)) {

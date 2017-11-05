@@ -1,11 +1,12 @@
 public enum Type {
     ID,
     NUM,
+    FLOAT,
     COMMENT,
     ERROR,
     DOLLAR,
     INT,
-    FLOAT,
+    FLOAT_DEC,
     VOID,
     SEMICOLON,
     LEFT_BRACKET,

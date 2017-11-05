@@ -4,15 +4,21 @@ class Parser {
     private Token lookahead;
     private ArrayList<Token> tokens;
     private int index = 0;
+    private ArrayList<ArrayList<Symbol>> symbolTableStack = new ArrayList<>();
 
     Parser(ArrayList<Token> tokens) {
-        System.out.println("Parsing");
         this.tokens = tokens;
         this.lookahead = tokens.get(0);
+
         if (tokens.get(tokens.size()-1).getType() != Type.DOLLAR) {
             this.tokens.add(new Token("$", Type.DOLLAR));
         }
+
+        // add the global symbol table
+        symbolTableStack.add(new ArrayList<Symbol>());
+
         program();
+
         if (this.lookahead.getType().equals(Type.DOLLAR)) {
             System.out.println("ACCEPT");
         } else {
@@ -20,8 +26,29 @@ class Parser {
         }
     }
 
+    private void findIdentifierInStack(Token t) {
+        t.print();
+        boolean found = false;
+        for (int i = 0; i < symbolTableStack.size() && !found; i++) {
+            if (symbolTableStack.get(i).size() > 0) {
+                for (int j = 0; j < symbolTableStack.get(i).size() && !found; j++) {
+                    if (symbolTableStack.get(i).get(j).getId().equals(t.getValue())) {
+                        System.out.println("FOUND IT");
+                        found = true;
+                    }
+                }
+            }
+        }
+        if (!found) {
+            symbolTableStack.get(symbolTableStack.size() - 1).add(new Symbol(false, t.getValue(), ""));
+        }
+    }
+
     private void match(Type t) {
         if (t.equals(lookahead.getType())) {
+            if (t.equals(Type.ID)) {
+                findIdentifierInStack(lookahead);
+            }
             lookahead = tokens.get(this.index + 1);
             index++;
         } else {
@@ -31,24 +58,24 @@ class Parser {
     }
 
     private void program() {
-        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT) || lookahead.getType().equals(Type.VOID)) {
+        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT_DEC) || lookahead.getType().equals(Type.VOID)) {
             declarationList();
         }
     }
     private void declarationList() {
-        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT) || lookahead.getType().equals(Type.VOID)) {
+        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT_DEC) || lookahead.getType().equals(Type.VOID)) {
             declaration();
             declarationListPrime();
         }
     }
     private void declarationListPrime() {
-        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT) || lookahead.getType().equals(Type.VOID)) {
+        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT_DEC) || lookahead.getType().equals(Type.VOID)) {
             declaration();
             declarationListPrime();
         }
     }
     private void declaration() {
-        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT) || lookahead.getType().equals(Type.VOID)) {
+        if (lookahead.getType().equals(Type.INT) || lookahead.getType().equals(Type.FLOAT_DEC) || lookahead.getType().equals(Type.VOID)) {
             typeSpecifier();
             match(Type.ID);
             declarationPrime();
@@ -79,8 +106,8 @@ class Parser {
     private void typeSpecifier() {
         if (lookahead.getType().equals(Type.INT)) {
             match(Type.INT);
-        } else if (lookahead.getType().equals(Type.FLOAT)) {
-            match(Type.FLOAT);
+        } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
+            match(Type.FLOAT_DEC);
         } else if (lookahead.getType().equals(Type.VOID)) {
             match(Type.VOID);
         }
@@ -94,8 +121,8 @@ class Parser {
         } else if (lookahead.getType().equals(Type.VOID)) {
             match(Type.VOID);
             paramList();
-        } else if (lookahead.getType().equals(Type.FLOAT)) {
-            match(Type.FLOAT);
+        } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
+            match(Type.FLOAT_DEC);
             match(Type.ID);
             paramPrime();
             paramListPrime();
@@ -120,7 +147,7 @@ class Parser {
             typeSpecifier();
             match(Type.ID);
             paramPrime();
-        } else if (lookahead.getType().equals(Type.FLOAT)) {
+        } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             typeSpecifier();
             match(Type.ID);
             paramPrime();
@@ -139,15 +166,17 @@ class Parser {
     private void compoundStmt() {
         if (lookahead.getType().equals(Type.LEFT_BRACE)) {
             match(Type.LEFT_BRACE);
+            symbolTableStack.add(new ArrayList<Symbol>());
             localDeclarations();
             statementList();
             match(Type.RIGHT_BRACE);
+            symbolTableStack.remove(symbolTableStack.size() - 1);
         }
     }
     private void localDeclarations() {
         if (lookahead.getType().equals(Type.INT)) {
             localDeclarationsPrime();
-        } else if (lookahead.getType().equals(Type.FLOAT)) {
+        } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             localDeclarationsPrime();
         } else if (lookahead.getType().equals(Type.VOID)) {
             localDeclarationsPrime();
@@ -159,7 +188,7 @@ class Parser {
             match(Type.ID);
             specifier();
             localDeclarationsPrime();
-        } else if (lookahead.getType().equals(Type.FLOAT)) {
+        } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             typeSpecifier();
             match(Type.ID);
             specifier();
@@ -200,6 +229,9 @@ class Parser {
         } else if (lookahead.getType().equals(Type.NUM)) {
             statement();
             statementListPrime();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            statement();
+            statementListPrime();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             statement();
             statementListPrime();
@@ -224,6 +256,8 @@ class Parser {
             expressionStmt();
         } else if (lookahead.getType().equals(Type.NUM)) {
             expressionStmt();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            expressionStmt();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             expressionStmt();
         } else if (lookahead.getType().equals(Type.SEMICOLON)) {
@@ -245,6 +279,9 @@ class Parser {
         } else if (lookahead.getType().equals(Type.SEMICOLON)) {
             match(Type.SEMICOLON);
         } else if (lookahead.getType().equals(Type.NUM)) {
+            expression();
+            match(Type.SEMICOLON);
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
             expression();
             match(Type.SEMICOLON);
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
@@ -292,6 +329,9 @@ class Parser {
         } else if (lookahead.getType().equals(Type.NUM)) {
             expression();
             match(Type.SEMICOLON);
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            expression();
+            match(Type.SEMICOLON);
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             expression();
             match(Type.SEMICOLON);
@@ -303,6 +343,11 @@ class Parser {
             var();
         } else if (lookahead.getType().equals(Type.NUM)) {
             match(Type.NUM);
+            termPrime();
+            additiveExpressionPrime();
+            relopExpression();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            match(Type.FLOAT);
             termPrime();
             additiveExpressionPrime();
             relopExpression();
@@ -460,6 +505,10 @@ class Parser {
             match(Type.NUM);
             termPrime();
             additiveExpressionPrime();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            match(Type.FLOAT);
+            termPrime();
+            additiveExpressionPrime();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             expression();
@@ -494,6 +543,9 @@ class Parser {
         } else if (lookahead.getType().equals(Type.NUM)) {
             match(Type.NUM);
             termPrime();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            match(Type.FLOAT);
+            termPrime();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             expression();
@@ -518,6 +570,8 @@ class Parser {
             call();
         } else if (lookahead.getType().equals(Type.NUM)) {
             match(Type.NUM);
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            match(Type.FLOAT);
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             expression();
@@ -545,6 +599,8 @@ class Parser {
             argList();
         } else if (lookahead.getType().equals(Type.NUM)) {
             argList();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
+            argList();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             argList();
         }
@@ -554,6 +610,9 @@ class Parser {
             expression();
             argListPrime();
         } else if (lookahead.getType().equals(Type.NUM)) {
+            expression();
+            argListPrime();
+        } else if (lookahead.getType().equals(Type.FLOAT)) {
             expression();
             argListPrime();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {

@@ -110,23 +110,26 @@ class FileInterpreter {
                         text = "(";
                     } else if (x.startsWith(")")) {
                         type = Type.RIGHT_PAREN;
-                        text = placeholder;
+                        text = ")";
                     } else if (x.startsWith("[")) {
                         type = Type.LEFT_BRACKET;
-                        text = placeholder;
+                        text = "[";
                     } else if (x.startsWith("]")) {
                         type = Type.RIGHT_BRACKET;
-                        text = placeholder;
+                        text = "]";
                     } else if (x.startsWith("{")) {
                         type = Type.LEFT_BRACE;
-                        text = placeholder;
+                        text = "{";
                         blockDepth++;
                     } else if (x.startsWith("}")) {
                         type = Type.RIGHT_BRACE;
-                        text = placeholder;
+                        text = "}";
                         blockDepth--;
                     } else if (placeholder.equals("int")) {
                         type = Type.INT;
+                        text = placeholder;
+                    } else if (placeholder.equals("float")) {
+                        type = Type.FLOAT_DEC;
                         text = placeholder;
                     } else if (placeholder.equals("void")) {
                         type = Type.VOID;
@@ -160,7 +163,9 @@ class FileInterpreter {
             }
             Token t = new Token(text, type);
 //            t.print(blockDepth);
-            tokens.add(t);
+            if (!t.getType().equals(Type.COMMENT)) {
+                tokens.add(t);
+            }
             if (text.length() > 0) {
                 readString(x.substring(text.length()).trim());
             }
