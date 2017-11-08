@@ -14,7 +14,6 @@ class FileInterpreter {
     }
 
     private static void readLine(String x) {
-//        System.out.println("\nINPUT: " + x);
         readString(x);
     }
 
@@ -126,7 +125,7 @@ class FileInterpreter {
                         text = "}";
                         blockDepth--;
                     } else if (placeholder.equals("int")) {
-                        type = Type.INT;
+                        type = Type.INT_DEC;
                         text = placeholder;
                     } else if (placeholder.equals("float")) {
                         type = Type.FLOAT_DEC;

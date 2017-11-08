@@ -5,7 +5,7 @@ public enum Type {
     COMMENT,
     ERROR,
     DOLLAR,
-    INT,
+    INT_DEC,
     FLOAT_DEC,
     VOID,
     SEMICOLON,

@@ -1,20 +1,20 @@
 public class Symbol {
     private boolean array;
     private String id;
-    private String value;
+    private Type type;
     private int arraySize;
 
-    public Symbol(boolean array, String id, String value, int arraySize) {
+    public Symbol(boolean array, String id, Type type, int arraySize) {
         this.array = array;
         this.id = id;
-        this.value = value;
+        this.type = type;
         this.arraySize = arraySize;
     }
 
-    public Symbol(boolean array, String id, String value) {
+    public Symbol(boolean array, String id, Type type) {
         this.array = array;
         this.id = id;
-        this.value = value;
+        this.type = type;
         this.arraySize = 0;
     }
 
@@ -34,12 +34,12 @@ public class Symbol {
         this.id = id;
     }
 
-    public String getValue() {
-        return value;
+    public Type getType() {
+        return type;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public int getArraySize() {
