@@ -5,6 +5,7 @@ class Parser {
     private ArrayList<Token> tokens;
     private int index = 0;
     private ArrayList<ArrayList<Symbol>> symbolTableStack = new ArrayList<>();
+    private ArrayList<String[]> quadruples = new ArrayList<>();
 
     Parser(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -21,7 +22,9 @@ class Parser {
         program();
 
         if (this.lookahead.getType().equals(Type.DOLLAR)) {
-            System.out.println("ACCEPT");
+//            System.out.println("ACCEPT");
+            System.out.printf("%-9s%-10s%-10s%-10s\n", "---------", "|---------", "|---------", "|---------");
+            quadruples.forEach(q -> System.out.printf("%-10s%-10s%-10s%-10s\n", q[0], q[1], q[2], q[3]));
         } else {
             reject();
         }
@@ -88,6 +91,45 @@ class Parser {
         reject();
     }
 
+    private void updateParametersInStack(Token t, ArrayList<Symbol> parameters) {
+        boolean found = false;
+        for (int i = symbolTableStack.size() - 1; i >= 0; i--) {
+            if (symbolTableStack.get(i).size() > 0) {
+                for (int j = 0; j < symbolTableStack.get(i).size() && !found; j++) {
+                    if (symbolTableStack.get(i).get(j).getId().equals(t.getValue())) {
+                        if (parameters != null) symbolTableStack.get(i).get(j).setParameterTypes(parameters);
+                        return;
+                    }
+                }
+            }
+        }
+        //reject if not found
+        reject();
+    }
+    private void checkParameters(Token t, ArrayList<Symbol> parameters) {
+        boolean found = false;
+        for (int i = symbolTableStack.size() - 1; i >= 0; i--) {
+            if (symbolTableStack.get(i).size() > 0) {
+                for (int j = 0; j < symbolTableStack.get(i).size() && !found; j++) {
+                    if (symbolTableStack.get(i).get(j).getId().equals(t.getValue())) {
+                        Symbol symbol = symbolTableStack.get(i).get(j);
+                        if (symbol.getParameterTypes().size() != parameters.size()) {
+                            reject();
+                        }
+                        for (int k = 0; k < symbol.getParameterTypes().size(); k++) {
+                            if (!symbol.getParameterTypes().get(k).getType().equals(parameters.get(k).getType())) {
+                                reject();
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        //reject if not found
+        reject();
+    }
+
     private void match(Type t) {
         if (t.equals(lookahead.getType())) {
             lookahead = tokens.get(this.index + 1);
@@ -124,6 +166,7 @@ class Parser {
             if (!function) {
                 reject();
             }
+            quadruples.add(new String[]{"func", identifier.getValue(), "void", ""}); // P4
             Type decType = declarationPrime(identifier);
             if (function && decType != null && !decType.equals(Type.VOID)) {
                 reject();
@@ -134,6 +177,14 @@ class Parser {
             Token identifier = lookahead;
             match(Type.ID);
             boolean function = lookahead.getType().equals(Type.LEFT_PAREN);
+
+            // P4
+            if (function) {
+                quadruples.add(new String[]{"func", identifier.getValue(), "int", ""});
+            } else {
+                quadruples.add(new String[]{"alloc", "4", "", identifier.getValue()});
+            }
+
             Type decType = declarationPrime(identifier);
             if (function && (decType == null || !decType.equals(Type.NUM))) {
                 reject();
@@ -142,6 +193,7 @@ class Parser {
             typeSpecifier();
             findIdentifierInCurrentLevel(lookahead, Type.FLOAT);
             Token identifier = lookahead;
+            quadruples.add(new String[]{"alloc", "4", "", identifier.getValue()}); // P4
             match(Type.ID);
             boolean function = lookahead.getType().equals(Type.LEFT_PAREN);
             Type decType = declarationPrime(identifier);
@@ -156,9 +208,11 @@ class Parser {
         } else if (lookahead.getType().equals(Type.LEFT_BRACKET)) {
             specifier(identifier);
         } else if(lookahead.getType().equals(Type.LEFT_PAREN)) {
+            Token id = tokens.get(index - 1);
             match(Type.LEFT_PAREN);
             symbolTableStack.add(new ArrayList<>());
-            params();
+            ArrayList<Symbol> params = params();
+            updateParametersInStack(id, params);
             match(Type.RIGHT_PAREN);
             return compoundStmt();
         }
@@ -184,58 +238,75 @@ class Parser {
             match(Type.VOID);
         }
     }
-    private void params() {
+    private ArrayList<Symbol> params() {
+        ArrayList<Symbol> paramArrayList = new ArrayList<>();
         if (lookahead.getType().equals(Type.INT_DEC)) {
             match(Type.INT_DEC);
             findIdentifierInCurrentLevel(lookahead, Type.NUM);
             match(Type.ID);
-            paramPrime();
-            paramListPrime();
+            boolean isArray = paramPrime();
+            paramArrayList.add(new Symbol(isArray, "", Type.NUM));
+            paramArrayList = paramListPrime(paramArrayList);
+            return paramArrayList;
         } else if (lookahead.getType().equals(Type.VOID)) {
             match(Type.VOID);
-            paramList();
+            paramArrayList.add(new Symbol(false, "", Type.VOID));
+            paramList(paramArrayList);
         } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             match(Type.FLOAT_DEC);
             findIdentifierInCurrentLevel(lookahead, Type.FLOAT);
             match(Type.ID);
-            paramPrime();
-            paramListPrime();
+            boolean isArray = paramPrime();
+            paramArrayList.add(new Symbol(isArray, "", Type.FLOAT));
+            paramArrayList = paramListPrime(paramArrayList);
+            return paramArrayList;
         }
+        return null;
     }
-    private void paramList() {
+    private ArrayList<Symbol> paramList(ArrayList<Symbol> paramArrayList) {
         if (lookahead.getType().equals(Type.ID)) {
+            reject();
             match(Type.ID);
-            paramPrime();
-            paramListPrime();
+            return paramListPrime(paramArrayList);
         }
+        return paramArrayList;
     }
-    private void paramListPrime() {
+    private ArrayList<Symbol> paramListPrime(ArrayList<Symbol> paramArrayList) {
         if (lookahead.getType().equals(Type.COMMA)) {
             match(Type.COMMA);
-            param();
-            paramListPrime();
+            Symbol p = param();
+            if (p != null) {
+                paramArrayList.add(p);
+            }
+            return paramListPrime(paramArrayList);
         }
+        return paramArrayList;
     }
-    private void param() {
+    private Symbol param() {
         if (lookahead.getType().equals(Type.INT_DEC)) {
             typeSpecifier();
             match(Type.ID);
-            paramPrime();
+            boolean isArray = paramPrime();
+            return new Symbol(isArray, "", Type.NUM);
         } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             typeSpecifier();
             match(Type.ID);
-            paramPrime();
+            boolean isArray = paramPrime();
+            return new Symbol(isArray, "", Type.FLOAT);
         } else if (lookahead.getType().equals(Type.VOID)) {
             typeSpecifier();
             match(Type.ID);
-            paramPrime();
+            reject();
         }
+        return null;
     }
-    private void paramPrime() {
+    private boolean paramPrime() {
         if (lookahead.getType().equals(Type.LEFT_BRACKET)) {
             match(Type.LEFT_BRACKET);
             match(Type.RIGHT_BRACKET);
+            return true;
         }
+        return false;
     }
     private Type compoundStmt() {
         if (lookahead.getType().equals(Type.LEFT_BRACE)) {
@@ -478,9 +549,9 @@ class Parser {
     private Type expression() {
         if (lookahead.getType().equals(Type.ID)) {
             Type expressionType = findIdentifierInStack(lookahead);
-            if (!expressionType.equals(Type.NUM)) {
-                reject();
-            }
+//            if (!expressionType.equals(Type.NUM)) {
+//                reject();
+//            }
             Token identifier = lookahead;
             match(Type.ID);
             Type varType = var(identifier);
@@ -529,7 +600,8 @@ class Parser {
             varPrime();
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
-            args();
+            ArrayList<Symbol> arguments = args();
+            checkParameters(identifier, arguments);
             match(Type.RIGHT_PAREN);
             termPrime();
             additiveExpressionPrime();
@@ -803,42 +875,57 @@ class Parser {
             varArr(identifier);
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
-            args();
+            ArrayList<Symbol> arguments = args();
+            checkParameters(identifier, arguments);
             match(Type.RIGHT_PAREN);
         }
     }
-    private void args() {
+    private ArrayList<Symbol> args() {
+        ArrayList<Symbol> symbolArrayList = new ArrayList<Symbol>();
         if (lookahead.getType().equals(Type.ID)) {
-            argList();
+            argList(symbolArrayList);
         } else if (lookahead.getType().equals(Type.NUM)) {
-            argList();
+            argList(symbolArrayList);
         } else if (lookahead.getType().equals(Type.FLOAT)) {
-            argList();
+            argList(symbolArrayList);
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
-            argList();
+            argList(symbolArrayList);
         }
+        return symbolArrayList;
     }
-    private void argList() {
+    private ArrayList<Symbol> argList(ArrayList<Symbol> symbolArrayList) {
         if (lookahead.getType().equals(Type.ID)) {
-            expression();
-            argListPrime();
+            Type expType = expression();
+            symbolArrayList.add(new Symbol(false, "", expType));
+            symbolArrayList = argListPrime(symbolArrayList);
+            return symbolArrayList;
         } else if (lookahead.getType().equals(Type.NUM)) {
-            expression();
-            argListPrime();
+            Type expType = expression();
+            symbolArrayList.add(new Symbol(false, "", expType));
+            symbolArrayList = argListPrime(symbolArrayList);
+            return symbolArrayList;
         } else if (lookahead.getType().equals(Type.FLOAT)) {
-            expression();
-            argListPrime();
+            Type expType = expression();
+            symbolArrayList.add(new Symbol(false, "", expType));
+            symbolArrayList = argListPrime(symbolArrayList);
+            return symbolArrayList;
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
-            expression();
-            argListPrime();
+            Type expType = expression();
+            symbolArrayList.add(new Symbol(false, "", expType));
+            symbolArrayList = argListPrime(symbolArrayList);
+            return symbolArrayList;
         }
+        return symbolArrayList;
     }
-    private void argListPrime() {
+    private ArrayList<Symbol> argListPrime(ArrayList<Symbol> symbolArrayList) {
         if (lookahead.getType().equals(Type.COMMA)) {
             match(Type.COMMA);
-            expression();
-            argListPrime();
+            Type expType = expression();
+            symbolArrayList.add(new Symbol(false, "", expType));
+            symbolArrayList = argListPrime(symbolArrayList);
+            return symbolArrayList;
         }
+        return symbolArrayList;
     }
 }
 

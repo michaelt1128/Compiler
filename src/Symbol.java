@@ -1,14 +1,27 @@
+import java.util.ArrayList;
+
 public class Symbol {
     private boolean array;
     private String id;
     private Type type;
     private int arraySize;
+    private ArrayList<Symbol> parameterTypes;
+
+    public ArrayList<Symbol> getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public void setParameterTypes(ArrayList<Symbol> parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+
 
     public Symbol(boolean array, String id, Type type, int arraySize) {
         this.array = array;
         this.id = id;
         this.type = type;
         this.arraySize = arraySize;
+        this.parameterTypes = new ArrayList<Symbol>();
     }
 
     public Symbol(boolean array, String id, Type type) {
@@ -16,6 +29,7 @@ public class Symbol {
         this.id = id;
         this.type = type;
         this.arraySize = 0;
+        this.parameterTypes = new ArrayList<Symbol>();
     }
 
     public boolean isArray() {

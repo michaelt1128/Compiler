@@ -1,16 +1,7 @@
 int q;
 int x;
-float y;
-void car(int j)
-{
-   int q[3];
-   x=q[33];
-}
-int j;
-
-void monkey(void)
-{
-    return;
+void main() {
+    int z;
+    z = 4;
 }
 
-int d;
