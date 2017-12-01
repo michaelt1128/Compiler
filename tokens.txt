@@ -1,7 +1,13 @@
 int q;
-int x;
-void main() {
-    int z;
+
+void main(float q) {
+    int z[4];
+
     z = 4;
 }
 
+int cat(int x, int y) {
+    int w;
+    w = 4;
+    return w;
+}
