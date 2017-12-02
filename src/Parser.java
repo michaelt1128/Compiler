@@ -6,6 +6,7 @@ class Parser {
     private int index = 0;
     private ArrayList<ArrayList<Symbol>> symbolTableStack = new ArrayList<>();
     private ArrayList<String[]> quadruples = new ArrayList<>();
+    private int tempVariableIndex = 0;
 
     Parser(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -554,9 +555,7 @@ class Parser {
     private Type expression() {
         if (lookahead.getType().equals(Type.ID)) {
             Type expressionType = findIdentifierInStack(lookahead);
-//            if (!expressionType.equals(Type.NUM)) {
-//                reject();
-//            }
+
             Token identifier = lookahead;
             match(Type.ID);
             Type varType = var(identifier);
@@ -565,24 +564,26 @@ class Parser {
             };
             return expressionType;
         } else if (lookahead.getType().equals(Type.NUM)) {
+            String lookaheadValue = lookahead.getValue();
             match(Type.NUM);
             Type termType = termPrime();
             if (termType != null && !termType.equals(Type.NUM)) {
                 reject();
             }
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime(lookaheadValue);
             if (aepType != null && !aepType.equals(Type.NUM)) {
                 reject();
             }
             relopExpression();
             return Type.NUM;
         } else if (lookahead.getType().equals(Type.FLOAT)) {
+            String lookaheadValue = lookahead.getValue();
             match(Type.FLOAT);
             Type termType = termPrime();
             if (termType != null && !termType.equals(Type.FLOAT)) {
                 reject();
             }
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime(lookaheadValue);
             if (aepType != null && !aepType.equals(Type.FLOAT)) {
                 reject();
             }
@@ -593,7 +594,7 @@ class Parser {
             Type expressionType = expression();
             match(Type.RIGHT_PAREN);
             termPrime();
-            additiveExpressionPrime();
+            additiveExpressionPrime("");
             relopExpression();
             return expressionType;
         }
@@ -609,7 +610,7 @@ class Parser {
             checkParameters(identifier, arguments);
             match(Type.RIGHT_PAREN);
             termPrime();
-            additiveExpressionPrime();
+            additiveExpressionPrime("");
             relopExpression();
         } else if (lookahead.getType().equals(Type.SET_EQUAL)) {
             varArr(identifier);
@@ -653,52 +654,52 @@ class Parser {
             return expression();
         } else if (lookahead.getType().equals(Type.EQUAL_TO)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.EQUAL_GREATER)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.EQUAL_LESS)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.GREATER_THAN)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.LESS_THAN)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.NOT_EQUAL)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.PLUS)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.MINUS)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.DIVIDE)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         } else if (lookahead.getType().equals(Type.MULTIPLY)) {
             termPrime();
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             relopExpression();
             return aepType;
         }
@@ -757,47 +758,56 @@ class Parser {
             match(Type.ID);
             call(identifier);
             Type termPrimeType = termPrime();
+            quadruples.add(new String[]{"add", identifier.getValue(), "", ""});
             if (!lookaheadType.equals(termPrimeType)) {
                 reject();
             }
-            Type aepType = additiveExpressionPrime();
+            Type aepType = additiveExpressionPrime("");
             if (aepType != null && !lookaheadType.equals(aepType)) {
                 reject();
             };
         } else if (lookahead.getType().equals(Type.NUM)) {
             match(Type.NUM);
             termPrime();
-            additiveExpressionPrime();
+            additiveExpressionPrime("");
         } else if (lookahead.getType().equals(Type.FLOAT)) {
             match(Type.FLOAT);
             termPrime();
-            additiveExpressionPrime();
+            additiveExpressionPrime("");
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             expression();
             match(Type.RIGHT_PAREN);
             termPrime();
-            additiveExpressionPrime();
+            additiveExpressionPrime("");
         }
     }
-    private Type additiveExpressionPrime() {
+    private Type additiveExpressionPrime(String previousValue) {
         if (lookahead.getType().equals(Type.PLUS)) {
             addop();
-            Type termType = term();
-            Type aepType = additiveExpressionPrime();
-            if (aepType != null && !aepType.equals(termType)) {
+            TypeLabelReturn typeLabelReturn = term();
+            String newIndex = "t" + tempVariableIndex;
+            quadruples.add(new String[]{"add", previousValue, typeLabelReturn.label, newIndex});
+            tempVariableIndex++;
+
+            Type aepType = additiveExpressionPrime(newIndex);
+            if (aepType != null && !aepType.equals(typeLabelReturn.type)) {
                 reject();
             }
-            return termType;
+            return typeLabelReturn.type;
         } else if (lookahead.getType().equals(Type.MINUS)) {
             addop();
-            Type termType = term();
-            Type aepType = additiveExpressionPrime();
-            if (aepType != null && !aepType.equals(termType)) {
+            TypeLabelReturn typeLabelReturn = term();
+            String newIndex = "t" + tempVariableIndex;
+            quadruples.add(new String[]{"add", previousValue, typeLabelReturn.label, newIndex});
+            tempVariableIndex++;
+
+            Type aepType = additiveExpressionPrime(newIndex);
+            if (aepType != null && !aepType.equals(typeLabelReturn.type)) {
                 System.out.println("rejected here");
                 reject();
             }
-            return termType;
+            return typeLabelReturn.type;
         }
         return null;
     }
@@ -808,28 +818,33 @@ class Parser {
             match(Type.MINUS);
         }
     }
-    private Type term() {
+    private TypeLabelReturn term() {
         if (lookahead.getType().equals(Type.ID)) {
             Type termType = findIdentifierInStack(lookahead);
             Token identifier = lookahead;
             match(Type.ID);
             call(identifier);
             termPrime();
-            return termType;
+            return new TypeLabelReturn(identifier.getType(), identifier.getValue());
         } else if (lookahead.getType().equals(Type.NUM)) {
+            Token identifier = lookahead;
             match(Type.NUM);
             termPrime();
-            return Type.NUM;
+//            return Type.NUM;
+            return new TypeLabelReturn(Type.NUM, identifier.getValue());
         } else if (lookahead.getType().equals(Type.FLOAT)) {
+            Token identifier = lookahead;
             match(Type.FLOAT);
             termPrime();
-            return Type.FLOAT;
+//            return Type.FLOAT;
+            return new TypeLabelReturn(Type.FLOAT, identifier.getValue());
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             Type termType = expression();
             match(Type.RIGHT_PAREN);
             termPrime();
-            return termType;
+//            return termType;
+            return new TypeLabelReturn(termType, "");
         }
         return null;
     }
@@ -934,3 +949,12 @@ class Parser {
     }
 }
 
+class TypeLabelReturn {
+    public Type type;
+    public String label;
+
+    public TypeLabelReturn(Type type, String label) {
+        this.type = type;
+        this.label = label;
+    }
+}
