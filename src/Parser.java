@@ -614,7 +614,9 @@ class Parser {
             relopExpression();
         } else if (lookahead.getType().equals(Type.SET_EQUAL)) {
             varArr(identifier);
-            return varPrime();
+            Type vpResult = varPrime();
+            quadruples.add(new String[]{"assign","","",identifier.getValue()});
+            return vpResult;
         } else if (lookahead.getType().equals(Type.EQUAL_TO)) {
             varArr(identifier);
             return varPrime();
@@ -799,7 +801,7 @@ class Parser {
             addop();
             TypeLabelReturn typeLabelReturn = term();
             String newIndex = "t" + tempVariableIndex;
-            quadruples.add(new String[]{"add", previousValue, typeLabelReturn.label, newIndex});
+            quadruples.add(new String[]{"sub", previousValue, typeLabelReturn.label, newIndex});
             tempVariableIndex++;
 
             Type aepType = additiveExpressionPrime(newIndex);
@@ -830,20 +832,17 @@ class Parser {
             Token identifier = lookahead;
             match(Type.NUM);
             termPrime();
-//            return Type.NUM;
             return new TypeLabelReturn(Type.NUM, identifier.getValue());
         } else if (lookahead.getType().equals(Type.FLOAT)) {
             Token identifier = lookahead;
             match(Type.FLOAT);
             termPrime();
-//            return Type.FLOAT;
             return new TypeLabelReturn(Type.FLOAT, identifier.getValue());
         } else if (lookahead.getType().equals(Type.LEFT_PAREN)) {
             match(Type.LEFT_PAREN);
             Type termType = expression();
             match(Type.RIGHT_PAREN);
             termPrime();
-//            return termType;
             return new TypeLabelReturn(termType, "");
         }
         return null;
