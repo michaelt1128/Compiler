@@ -46,10 +46,10 @@
           <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Parser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="261">
-                  <caret line="848" column="5" lean-forward="true" selection-start-line="848" selection-start-column="5" selection-end-line="848" selection-end-column="5" />
+                <state relative-caret-position="819">
+                  <caret line="696" column="32" lean-forward="false" selection-start-line="696" selection-start-column="17" selection-end-line="696" selection-end-column="32" />
                   <folding>
-                    <element signature="e#35428#35436#0" expanded="true" />
+                    <element signature="e#34107#34115#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -74,8 +74,8 @@
           <file leaf-file-name="tokens.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/tokens.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="160">
-                  <caret line="10" column="19" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+                <state relative-caret-position="48">
+                  <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
@@ -122,7 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>public</find>
       <find>left_brace</find>
       <find>match(Type.RIGHT_BRACE);</find>
       <find>match(Type.ID);</find>
@@ -152,6 +151,7 @@
       <find>specifier</find>
       <find>additiveExpressionPrime</find>
       <find>factor</find>
+      <find>expressionResult</find>
     </findStrings>
     <replaceStrings>
       <replace>Type.INT_DEC</replace>
@@ -436,7 +436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512246873782</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="assign started">
+      <created>1512247307661</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1512247307661</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -513,7 +520,8 @@
     <MESSAGE value="Starting project 4" />
     <MESSAGE value="alloc/func/param working" />
     <MESSAGE value="add works with temp vars" />
-    <option name="LAST_COMMIT_MESSAGE" value="add works with temp vars" />
+    <MESSAGE value="assign started" />
+    <option name="LAST_COMMIT_MESSAGE" value="assign started" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -524,11 +532,17 @@
           <properties />
           <option name="timeStamp" value="210" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Parser.java</url>
+          <line>752</line>
+          <properties />
+          <option name="timeStamp" value="243" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="242" />
+      <option name="time" value="245" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -967,18 +981,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tokens.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="10" column="19" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+        <state relative-caret-position="48">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="848" column="5" lean-forward="true" selection-start-line="848" selection-start-column="5" selection-end-line="848" selection-end-column="5" />
+        <state relative-caret-position="819">
+          <caret line="696" column="32" lean-forward="false" selection-start-line="696" selection-start-column="17" selection-end-line="696" selection-end-column="32" />
           <folding>
-            <element signature="e#35428#35436#0" expanded="true" />
+            <element signature="e#34107#34115#0" expanded="true" />
           </folding>
         </state>
       </provider>
