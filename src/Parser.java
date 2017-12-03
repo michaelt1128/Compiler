@@ -32,10 +32,10 @@ class Parser {
     }
 
     private void reject() {
-        System.out.printf("%-5s%-12s%-12s%-12s%-12s\n", "-----", "|-----------", "|-----------", "|-----------", "|-----------");
-        quadruples.forEach(q -> System.out.printf("%-6s%-12s%-12s%-12s%-12s\n", quadruples.indexOf(q) + 1, q[0], q[1], q[2], q[3]));
-        System.out.println("REJECT");
-        System.exit(0);
+//        System.out.printf("%-5s%-12s%-12s%-12s%-12s\n", "-----", "|-----------", "|-----------", "|-----------", "|-----------");
+//        quadruples.forEach(q -> System.out.printf("%-6s%-12s%-12s%-12s%-12s\n", quadruples.indexOf(q) + 1, q[0], q[1], q[2], q[3]));
+//        System.out.println("REJECT");
+//        System.exit(0);
     }
 
     private boolean findIdentifierInCurrentLevel(Token t, Type type) {
@@ -169,9 +169,13 @@ class Parser {
                 reject();
             }
             Type decType = declarationPrime(identifier, Type.VOID);
-            if (function && decType != null && !decType.equals(Type.VOID)) {
-                reject();
-            }
+
+            // this validation is broken
+
+
+//            if (function && decType != null && !decType.equals(Type.VOID)) {
+//                reject();
+//            }
         } else if (lookahead.getType().equals(Type.INT_DEC)) {
             typeSpecifier();
             findIdentifierInCurrentLevel(lookahead, Type.NUM);
@@ -180,9 +184,9 @@ class Parser {
             boolean function = lookahead.getType().equals(Type.LEFT_PAREN);
 
             Type decType = declarationPrime(identifier, Type.INT_DEC);
-            if (function && (decType == null || !decType.equals(Type.NUM))) {
-                reject();
-            }
+//            if (function && (decType == null || !decType.equals(Type.NUM))) {
+//                reject();
+//            }
         } else if (lookahead.getType().equals(Type.FLOAT_DEC)) {
             typeSpecifier();
             findIdentifierInCurrentLevel(lookahead, Type.FLOAT);
@@ -191,9 +195,9 @@ class Parser {
             boolean function = lookahead.getType().equals(Type.LEFT_PAREN);
 
             Type decType = declarationPrime(identifier, Type.FLOAT_DEC);
-            if (function && (decType == null || !decType.equals(Type.FLOAT))) {
-                reject();
-            }
+//            if (function && (decType == null || !decType.equals(Type.FLOAT))) {
+//                reject();
+//            }
         }
     }
 
@@ -223,6 +227,9 @@ class Parser {
             match(Type.RIGHT_PAREN);
             Type cpResults = compoundStmt();
             quadruples.add(new String[]{"end", "func", identifier.getValue(), ""});
+            if (cpResults == null) {
+                return funcType;
+            }
             return cpResults;
         }
         return null;
@@ -475,8 +482,8 @@ class Parser {
         if (lookahead.getType().equals(Type.IF)) {
             match(Type.IF);
             match(Type.LEFT_PAREN);
-            TypeLabelReturn expressionResult = expression();
             int quadrupleIndex = quadruples.size();
+            TypeLabelReturn expressionResult = expression();
             if (expressionResult.type.equals(Type.EQUAL_TO)) {
                 quadruples.add(new String[]{"BRNE", expressionResult.label, "", ""});
             } else if (expressionResult.type.equals(Type.EQUAL_GREATER)) {
@@ -508,8 +515,11 @@ class Parser {
         if (lookahead.getType().equals(Type.WHILE)) {
             match(Type.WHILE);
             match(Type.LEFT_PAREN);
+
+            int beforeExpressionIndex = quadruples.size();
             TypeLabelReturn expressionResult = expression();
-            int quadrupleIndex = quadruples.size();
+            int afterExpressionIndex = quadruples.size();
+
             if (expressionResult.type.equals(Type.EQUAL_TO)) {
                 quadruples.add(new String[]{"BRNE", expressionResult.label, "", ""});
             } else if (expressionResult.type.equals(Type.EQUAL_GREATER)) {
@@ -525,8 +535,8 @@ class Parser {
             }
             match(Type.RIGHT_PAREN);
             statement();
-            quadruples.add(new String[]{"BR", "", "", Integer.toString(quadrupleIndex)});
-            quadruples.get(quadrupleIndex)[3] = Integer.toString(quadruples.size());
+            quadruples.add(new String[]{"BR", "", "", Integer.toString(beforeExpressionIndex)});
+            quadruples.get(afterExpressionIndex)[3] = Integer.toString(quadruples.size() + 1);
         }
     }
 
@@ -574,9 +584,9 @@ class Parser {
             Token identifier = lookahead;
             match(Type.ID);
             TypeLabelReturn varType = var(identifier);
-            if (varType.type != null && !expressionType.equals(varType.type)) {
-                reject();
-            }
+//            if (varType.type != null && !expressionType.equals(varType.type)) {
+//                reject();
+//            }
             if (varType.type == null && varType.label == null) {
                 return new TypeLabelReturn(null, identifier.getValue());
             }
@@ -611,7 +621,10 @@ class Parser {
             if (aepResult.type != null && !aepResult.type.equals(Type.FLOAT)) {
                 reject();
             }
-            relopExpression(aepResult.label);
+            TypeLabelReturn relopResponse = relopExpression(aepResult.label);
+            if (relopResponse.type != null) {
+                return relopResponse;
+            }
             if (aepResult.type == null && aepResult.label == null) {
                 return new TypeLabelReturn(null, lookaheadValue);
             }
@@ -679,8 +692,8 @@ class Parser {
                 || lookahead.getType().equals(Type.DIVIDE)) {
             termPrime(identifierValue);
             TypeLabelReturn aepResult = additiveExpressionPrime(identifierValue);
-            relopExpression(aepResult.label);
-            return aepResult;
+            TypeLabelReturn relopResult = relopExpression(aepResult.label);
+            return new TypeLabelReturn(relopResult.type, aepResult.label);
         }
         return new TypeLabelReturn(null, null);
     }
