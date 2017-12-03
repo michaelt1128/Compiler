@@ -33,7 +33,7 @@
           <file leaf-file-name="FileInterpreter.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/FileInterpreter.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="176">
+                <state relative-caret-position="16">
                   <caret line="15" column="44" lean-forward="false" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -46,10 +46,10 @@
           <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Parser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="819">
-                  <caret line="696" column="32" lean-forward="false" selection-start-line="696" selection-start-column="17" selection-end-line="696" selection-end-column="32" />
+                <state relative-caret-position="64">
+                  <caret line="764" column="22" lean-forward="true" selection-start-line="764" selection-start-column="22" selection-end-line="764" selection-end-column="22" />
                   <folding>
-                    <element signature="e#34107#34115#0" expanded="true" />
+                    <element signature="e#33551#33559#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -74,8 +74,8 @@
           <file leaf-file-name="tokens.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/tokens.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="48">
-                  <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+                <state relative-caret-position="128">
+                  <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
                   <folding />
                 </state>
               </provider>
@@ -122,9 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>left_brace</find>
-      <find>match(Type.RIGHT_BRACE);</find>
-      <find>match(Type.ID);</find>
       <find>Type.INT</find>
       <find>match(Type.INT_DEC);</find>
       <find>Type.set_equal</find>
@@ -147,11 +144,14 @@
       <find>updateParametersInStack</find>
       <find>reject</find>
       <find>SET_EQUAL</find>
-      <find>var</find>
       <find>specifier</find>
       <find>additiveExpressionPrime</find>
       <find>factor</find>
       <find>expressionResult</find>
+      <find>var</find>
+      <find>var(</find>
+      <find>assi</find>
+      <find>ass</find>
     </findStrings>
     <replaceStrings>
       <replace>Type.INT_DEC</replace>
@@ -443,7 +443,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512247307661</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fixing add/sub">
+      <created>1512249788934</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1512249788934</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -470,7 +477,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32698414" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32698414" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -521,28 +528,20 @@
     <MESSAGE value="alloc/func/param working" />
     <MESSAGE value="add works with temp vars" />
     <MESSAGE value="assign started" />
-    <option name="LAST_COMMIT_MESSAGE" value="assign started" />
+    <MESSAGE value="fixing add/sub" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing add/sub" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Parser.java</url>
-          <line>33</line>
-          <properties />
-          <option name="timeStamp" value="210" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Parser.java</url>
-          <line>752</line>
-          <properties />
-          <option name="timeStamp" value="243" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="245" />
+      <default-breakpoints>
+        <breakpoint log-message="true" type="java-exception">
+          <properties />
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="309" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -924,17 +923,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FileInterpreter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="15" column="44" lean-forward="false" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#404#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Symbol.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
@@ -981,18 +969,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tokens.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        <state relative-caret-position="128">
+          <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FileInterpreter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="15" column="44" lean-forward="false" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#404#405#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
-          <caret line="696" column="32" lean-forward="false" selection-start-line="696" selection-start-column="17" selection-end-line="696" selection-end-column="32" />
+        <state relative-caret-position="64">
+          <caret line="764" column="22" lean-forward="true" selection-start-line="764" selection-start-column="22" selection-end-line="764" selection-end-column="22" />
           <folding>
-            <element signature="e#34107#34115#0" expanded="true" />
+            <element signature="e#33551#33559#0" expanded="true" />
           </folding>
         </state>
       </provider>

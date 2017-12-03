@@ -6,6 +6,6 @@ void main(float q) {
 
 int cat(int x, int y) {
     int w;
-    w = x + 4;
+    w[4] = x + 4+6+4*4;
     return w;
 }
