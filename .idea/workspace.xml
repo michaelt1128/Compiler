@@ -15,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.52760416">
+    <splitter split-orientation="horizontal" split-proportion="0.5269139">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="Compiler.java" pinned="false" current-in-tab="false">
@@ -46,10 +46,10 @@
           <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Parser.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="64">
-                  <caret line="764" column="22" lean-forward="true" selection-start-line="764" selection-start-column="22" selection-end-line="764" selection-end-column="22" />
+                <state relative-caret-position="277">
+                  <caret line="472" column="12" lean-forward="true" selection-start-line="472" selection-start-column="12" selection-end-line="472" selection-end-column="12" />
                   <folding>
-                    <element signature="e#33551#33559#0" expanded="true" />
+                    <element signature="e#35253#35261#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -75,7 +75,7 @@
             <entry file="file://$PROJECT_DIR$/tokens.txt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="128">
-                  <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+                  <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="11" />
                   <folding />
                 </state>
               </provider>
@@ -122,10 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Type.INT</find>
-      <find>match(Type.INT_DEC);</find>
-      <find>Type.set_equal</find>
-      <find>expression();</find>
       <find>Type.INT_DEC</find>
       <find>Type.ID</find>
       <find>.equals(Type.LEFT_PAREN)</find>
@@ -152,6 +148,10 @@
       <find>var(</find>
       <find>assi</find>
       <find>ass</find>
+      <find>arg</find>
+      <find>call</find>
+      <find>T</find>
+      <find>Type.if</find>
     </findStrings>
     <replaceStrings>
       <replace>Type.INT_DEC</replace>
@@ -450,7 +450,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512249788934</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="mult started">
+      <created>1512264998306</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1512264998306</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -529,10 +536,19 @@
     <MESSAGE value="add works with temp vars" />
     <MESSAGE value="assign started" />
     <MESSAGE value="fixing add/sub" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing add/sub" />
+    <MESSAGE value="mult started" />
+    <option name="LAST_COMMIT_MESSAGE" value="mult started" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Parser.java</url>
+          <line>34</line>
+          <properties />
+          <option name="timeStamp" value="310" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -541,7 +557,7 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="309" />
+      <option name="time" value="327" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -967,14 +983,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tokens.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="8" column="22" lean-forward="false" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FileInterpreter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="16">
@@ -986,12 +994,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tokens.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="764" column="22" lean-forward="true" selection-start-line="764" selection-start-column="22" selection-end-line="764" selection-end-column="22" />
+        <state relative-caret-position="277">
+          <caret line="472" column="12" lean-forward="true" selection-start-line="472" selection-start-column="12" selection-end-line="472" selection-end-column="12" />
           <folding>
-            <element signature="e#33551#33559#0" expanded="true" />
+            <element signature="e#35253#35261#0" expanded="true" />
           </folding>
         </state>
       </provider>

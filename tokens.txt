@@ -1,11 +1,11 @@
-int q;
 
-void main(float q) {
-    int z[4];
-}
-
-int cat(int x, int y) {
+int cat(int x) {
     int w;
-    w[4] = x + 4+6+4*4;
-    return w;
+    w = 1+3*4/5;
+    return w + 2;
+}
+void main() {
+    if (4 > 3) {
+        cat(1);
+    }
 }
